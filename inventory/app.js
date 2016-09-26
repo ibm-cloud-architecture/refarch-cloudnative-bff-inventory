@@ -1,3 +1,6 @@
+if (process.env.NEW_RELIC_LICENSE) { 
+    var newrelic = require('newrelic') 
+}
 var express = require('express');
 var http = require('http');
 var request = require('request');
