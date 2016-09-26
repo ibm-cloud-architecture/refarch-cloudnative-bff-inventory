@@ -1,4 +1,4 @@
-if (process.env.NEW_RELIC_LICENSE) { 
+if (process.env.NEW_RELIC_LICENSE_KEY) { 
     var newrelic = require('newrelic') 
 }
 var express = require('express');
