@@ -27,16 +27,16 @@ then
   LICENSE_KEY=$(echo  "${VCAP_SERVICES}" | jq --raw-output ".newrelic[0].credentials.licenseKey")
 
   ## Allow user-provided-services to overwrite brokered services, if they exist
-  UP_LICENSE_KEY=$(echo "${VCAP_SERVICES}" | jq --raw-output  '.["user-provided"] | .[] | select(.name == "newrelic") | .credentials.licenseKey')
+  UP_LICENSE_KEY=$(echo "${VCAP_SERVICES}" | jq --raw-output  '.["user-provided"] | .[] | select(.name == "newrelic") | .credentials.licenseKey' 2>/dev/null )
   if [[ "$UP_LICENSE_KEY" != "null" ]] && [[ ! -z $UP_LICENSE_KEY ]]
   then
-    LISENSE_KEY=UP_LICENSE_KEY
+    echo "License Key found in User Provided Service: ${UP_LICENSE_KEY}"
+    LICENSE_KEY=$UP_LICENSE_KEY
   fi
   
   if [[ ! -z $LICENSE_KEY ]] && [[ "${LICENSE_KEY}" != "null" ]]
   then
     echo "Found bound New Relic service instance"
-    echo "And it is ${LICENSE_KEY}"
     export NEW_RELIC_LICENSE_KEY=$LICENSE_KEY
   fi
 fi
@@ -54,6 +54,8 @@ then
     $NPM_BIN install newrelic
     cd $OLD_PWD
   fi
+else
+  echo "No New Relic license key found"
 fi
 
 # Check if we have the necessary new relic configuration
