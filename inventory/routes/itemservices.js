@@ -71,6 +71,9 @@ module.exports = function(app, request) {
   		}
 		}, function (error, response, body) {
 
+			if (0 === body.length) {
+				body="{}";
+			}
 			var bodyJson = JSON.parse(body);
 
 			if (!error && response.statusCode == 200) {
